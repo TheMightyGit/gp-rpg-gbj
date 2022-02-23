@@ -43,13 +43,13 @@ var (
 			"                                        ",
 			"        \x1bF\x05<SPACE>\x1bF\x01/\x1bF\x05<BUTTON>\x1bF\x01 to start       ",
 		},
-		[5]string{
-			"                                        ",
-			"Music: 'Somewhere in the Elevator'      ",
-			"       by Peachtea@You're Perfect Studio",
-			"                                        ",
-			"        \x1bF\x05<SPACE>\x1bF\x01/\x1bF\x05<BUTTON>\x1bF\x01 to start       ",
-		},
+		//		[5]string{
+		//			"                                        ",
+		//			"Music: 'Somewhere in the Elevator'      ",
+		//			"       by Peachtea@You're Perfect Studio",
+		//			"                                        ",
+		//			"        \x1bF\x05<SPACE>\x1bF\x01/\x1bF\x05<BUTTON>\x1bF\x01 to start       ",
+		//		},
 		[5]string{
 			"     Special thanks to playtesters:     ",
 			"      Pipsissiwa, Dunk, Joe, Mikey      ",
