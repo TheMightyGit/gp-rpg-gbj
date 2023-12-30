@@ -2,8 +2,6 @@ package cartridge
 
 import (
 	"image"
-
-	"github.com/TheMightyGit/marv/marvlib"
 )
 
 func isFloor(tx, ty uint8) bool {
@@ -21,18 +19,18 @@ type Map struct {
 }
 
 func (m *Map) Start() {
-	marvlib.API.SpritesGet(SpriteMap).ChangePos(viewport)
-	marvlib.API.SpritesGet(SpriteMap).Show(GfxBankTiles, marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaMainMap))
+	API.SpritesGet(SpriteMap).ChangePos(viewport)
+	API.SpritesGet(SpriteMap).Show(GfxBankTiles, API.MapBanksGet(MapBankMap).GetArea(MapBankAreaMainMap))
 }
 
 func (m *Map) Update() {
-	marvlib.API.SpritesGet(SpriteMap).ChangeViewport(
+	API.SpritesGet(SpriteMap).ChangeViewport(
 		image.Point{}.Add(c.Pos),
 	)
 }
 
 func (m *Map) Get(pos image.Point) (uint8, uint8, uint8, uint8) {
-	return marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaMainMap).Get(pos)
+	return API.MapBanksGet(MapBankMap).GetArea(MapBankAreaMainMap).Get(pos)
 }
 
 func (m *Map) IsFloorAt(pos image.Point) bool {
@@ -82,7 +80,7 @@ func (m *Map) UpdateBrightnessFrom(pos image.Point) {
 
 	if intensity > -1 {
 		for i := 0; i < SpriteOverlay; i++ {
-			marvlib.API.SpritesGet(i).ChangePalette(intensity)
+			API.SpritesGet(i).ChangePalette(intensity)
 		}
 	}
 }

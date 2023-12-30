@@ -3,8 +3,6 @@ package cartridge
 import (
 	"image"
 	"strings"
-
-	"github.com/TheMightyGit/marv/marvlib"
 )
 
 const (
@@ -142,9 +140,9 @@ func (p *Player) SayAgain() bool {
 }
 
 func (p *Player) Start() {
-	marvlib.API.SpritesGet(SpritePlayer).ChangePos(image.Rectangle{p.Pos.Add(viewport.Min), image.Point{16, 16}})
-	marvlib.API.SpritesGet(SpritePlayer).Show(GfxBankTiles, marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaPlayer))
-	marvlib.API.SpritesGet(SpritePlayer).ChangeViewport(image.Point{16 * 1, 16 * 1})
+	API.SpritesGet(SpritePlayer).ChangePos(image.Rectangle{p.Pos.Add(viewport.Min), image.Point{16, 16}})
+	API.SpritesGet(SpritePlayer).Show(GfxBankTiles, API.MapBanksGet(MapBankMap).GetArea(MapBankAreaPlayer))
+	API.SpritesGet(SpritePlayer).ChangeViewport(image.Point{16 * 1, 16 * 1})
 }
 
 func (p *Player) guessedCorrectWord() bool {
@@ -305,13 +303,13 @@ func (p *Player) Update() {
 		}
 	}
 
-	marvlib.API.SpritesGet(SpritePlayer).ChangePos(
+	API.SpritesGet(SpritePlayer).ChangePos(
 		image.Rectangle{
 			p.Pos.Add(viewport.Min).Sub(c.Pos).Sub(image.Point{Y: 2}),
 			image.Point{16, 16},
 		},
 	)
-	marvlib.API.SpritesGet(SpritePlayer).ChangeViewport(
+	API.SpritesGet(SpritePlayer).ChangeViewport(
 		image.Point{16 * p.animOffset, 16 * ((p.Frame / 4) % 4)},
 	)
 }

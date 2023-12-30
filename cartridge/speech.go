@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"strings"
 
-	"github.com/TheMightyGit/marv/marvlib"
 	"github.com/TheMightyGit/marv/marvtypes"
 )
 
@@ -34,13 +33,13 @@ type Speech struct {
 }
 
 func (s *Speech) Start() {
-	s.area = marvlib.API.MapBanksGet(MapBankMap).AllocArea(image.Point{27, 18})
+	s.area = API.MapBanksGet(MapBankMap).AllocArea(image.Point{27, 18})
 	// the 6x8 grid aligns better offset by -1
 	v := viewport
 	v.Min.X--
 	v.Max.X++
-	marvlib.API.SpritesGet(SpriteSpeech).ChangePos(v)
-	marvlib.API.SpritesGet(SpriteSpeech).Show(GfxBankFont, s.area)
+	API.SpritesGet(SpriteSpeech).ChangePos(v)
+	API.SpritesGet(SpriteSpeech).Show(GfxBankFont, s.area)
 
 	s.topArea = s.area.GetSubArea(image.Rect(10, 0, 27, 12))
 	s.topTextArea = s.topArea.GetSubArea(image.Rect(1, 1, 16, 11))
@@ -191,9 +190,8 @@ func center(t string) string {
 func (s *Speech) UpdateNewWordSplash() {
 	if newWordFlashCounter > 0 {
 		newWordFlashCounter--
-		var fg, bg uint8 = 16, 16
 		if newWordFlashCounter > 0 {
-			fg, bg = 14, 15
+			var fg, bg uint8 = 14, 15
 			txt := center("Words added to Kit Bag!") + "\n\x1bF\x05" + center(newWordText)
 			s.newWordTextArea.StringToMap(image.Point{}, fg, bg, txt)
 		} else {
@@ -847,7 +845,7 @@ var Credits = &Conversation{
 		"CREDITS: Press \x14 to restart.",
 	},
 	Then: func(success bool) {
-		marvlib.API.ConsoleReset()
+		API.ConsoleReset()
 		p.State = PlayerEndGame
 	},
 }

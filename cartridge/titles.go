@@ -5,7 +5,6 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/TheMightyGit/marv/marvlib"
 	"github.com/TheMightyGit/marv/marvtypes"
 )
 
@@ -76,10 +75,10 @@ var (
 
 func (t *Titles) Start() {
 
-	marvlib.API.SpritesGet(SpriteTitleScreenBG).ChangePos(viewport)
-	marvlib.API.SpritesGet(SpriteTitleScreenBG).Show(
+	API.SpritesGet(SpriteTitleScreenBG).ChangePos(viewport)
+	API.SpritesGet(SpriteTitleScreenBG).Show(
 		GfxBankTiles,
-		marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenBG),
+		API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenBG),
 	)
 
 	logoViewport = viewport
@@ -87,39 +86,39 @@ func (t *Titles) Start() {
 	logoViewport.Min.Y += (16 * 1)
 	logoViewport.Max.X = 16 * 8
 	logoViewport.Max.Y = 16 * 5
-	marvlib.API.SpritesGet(SpriteTitleScreenLogo).ChangePos(logoViewport)
-	marvlib.API.SpritesGet(SpriteTitleScreenLogo).Show(
+	API.SpritesGet(SpriteTitleScreenLogo).ChangePos(logoViewport)
+	API.SpritesGet(SpriteTitleScreenLogo).Show(
 		GfxBankTiles,
-		marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenLogo),
+		API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenLogo),
 	)
 
 	greencrossViewport = viewport
 	greencrossViewport.Max.X = 16 * 3
 	greencrossViewport.Max.Y = 16 * 3
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCross).ChangePos(greencrossViewport)
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCross).Show(
+	API.SpritesGet(SpriteTitleScreenGreenCross).ChangePos(greencrossViewport)
+	API.SpritesGet(SpriteTitleScreenGreenCross).Show(
 		GfxBankTiles,
-		marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenGreenCross),
+		API.MapBanksGet(MapBankMap).GetArea(MapBankAreaTitleScreenGreenCross),
 	)
 	greencrossViewport.Min.X = -2000
 
 	greencrossDetailViewport = viewport
 	greencrossDetailViewport.Max.X = 16
 	greencrossDetailViewport.Max.Y = 16
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangePos(greencrossDetailViewport)
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCrossDetail).Show(
+	API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangePos(greencrossDetailViewport)
+	API.SpritesGet(SpriteTitleScreenGreenCrossDetail).Show(
 		GfxBankTiles,
-		marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaPlayer),
+		API.MapBanksGet(MapBankMap).GetArea(MapBankAreaPlayer),
 	)
 	greencrossDetailViewport.Min.X = -2000
 
-	t.textArea = marvlib.API.MapBanksGet(MapBankMap).AllocArea(image.Point{40, 5})
+	t.textArea = API.MapBanksGet(MapBankMap).AllocArea(image.Point{40, 5})
 	t.textArea.ClearWithColour(0, 0, 14, 16)
 	v := viewport
 	v.Min.Y += 114
 	v.Max.Y = 5 * 6
-	marvlib.API.SpritesGet(SpriteTitleScreenText).ChangePos(v)
-	marvlib.API.SpritesGet(SpriteTitleScreenText).Show(
+	API.SpritesGet(SpriteTitleScreenText).ChangePos(v)
+	API.SpritesGet(SpriteTitleScreenText).Show(
 		GfxBankSmallFont,
 		t.textArea,
 	)
@@ -144,13 +143,13 @@ func (t *Titles) updateText(c uint8) {
 
 func (t *Titles) Update() {
 	e := &InputType{
-		MousePos:        marvlib.API.InputMousePos(),
-		MousePosDelta:   marvlib.API.InputMousePosDelta(),
-		MouseWheelDelta: marvlib.API.InputMouseWheelDelta(),
-		MousePressed:    marvlib.API.InputMousePressed(),
-		MouseHeld:       marvlib.API.InputMouseHeld(),
-		MouseReleased:   marvlib.API.InputMouseReleased(),
-		InputChars:      marvlib.API.InputChars(),
+		MousePos:        API.InputMousePos(),
+		MousePosDelta:   API.InputMousePosDelta(),
+		MouseWheelDelta: API.InputMouseWheelDelta(),
+		MousePressed:    API.InputMousePressed(),
+		MouseHeld:       API.InputMouseHeld(),
+		MouseReleased:   API.InputMouseReleased(),
+		InputChars:      API.InputChars(),
 		GamepadButtonStates: [4]marvtypes.GamepadState{
 			{Unmapped: 0, Mapped: 0},
 			{Unmapped: 0, Mapped: 0},
@@ -160,18 +159,18 @@ func (t *Titles) Update() {
 	}
 
 	if isButton(e) {
-		marvlib.API.SpritesGet(SpriteTitleScreenBG).SetEnabled(false)
-		marvlib.API.SpritesGet(SpriteTitleScreenLogo).SetEnabled(false)
-		marvlib.API.SpritesGet(SpriteTitleScreenText).SetEnabled(false)
-		marvlib.API.SpritesGet(SpriteTitleScreenGreenCross).SetEnabled(false)
-		marvlib.API.SpritesGet(SpriteTitleScreenGreenCrossDetail).SetEnabled(false)
+		API.SpritesGet(SpriteTitleScreenBG).SetEnabled(false)
+		API.SpritesGet(SpriteTitleScreenLogo).SetEnabled(false)
+		API.SpritesGet(SpriteTitleScreenText).SetEnabled(false)
+		API.SpritesGet(SpriteTitleScreenGreenCross).SetEnabled(false)
+		API.SpritesGet(SpriteTitleScreenGreenCrossDetail).SetEnabled(false)
 		onTitleScreen = false
 		suppressControllerRepeat = true
 	}
 
 	v := logoViewport
 	v.Min.Y += int(math.Sin(float64(frameCount)/20.0) * 16)
-	marvlib.API.SpritesGet(SpriteTitleScreenLogo).ChangePos(v)
+	API.SpritesGet(SpriteTitleScreenLogo).ChangePos(v)
 
 	greencrossViewport.Min.X -= 1
 	greencrossDetailViewport.Min.X -= 1
@@ -185,12 +184,12 @@ func (t *Titles) Update() {
 			16 * rand.Intn(2),
 		}
 	}
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCross).ChangePos(greencrossViewport)
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangePos(greencrossDetailViewport)
+	API.SpritesGet(SpriteTitleScreenGreenCross).ChangePos(greencrossViewport)
+	API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangePos(greencrossDetailViewport)
 	if rand.Intn(20) == 0 {
 		f.Y = 16 * rand.Intn(2)
 	}
-	marvlib.API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangeViewport(f)
+	API.SpritesGet(SpriteTitleScreenGreenCrossDetail).ChangeViewport(f)
 
 	if frameCount%(60*4) == 0 {
 		t.updateText(1)

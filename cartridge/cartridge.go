@@ -4,7 +4,6 @@ import (
 	"embed"
 	"image"
 
-	"github.com/TheMightyGit/marv/marvlib"
 	"github.com/TheMightyGit/marv/marvtypes"
 )
 
@@ -74,19 +73,19 @@ const (
 )
 
 func isUp(e *InputType) bool {
-	return marvlib.API.InputIsKeyDown(marvlib.KeyArrowUp) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_UP != 0
+	return API.InputIsKeyDown(marvtypes.KeyArrowUp) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_UP != 0
 }
 func isDown(e *InputType) bool {
-	return marvlib.API.InputIsKeyDown(marvlib.KeyArrowDown) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_DOWN != 0
+	return API.InputIsKeyDown(marvtypes.KeyArrowDown) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_DOWN != 0
 }
 func isLeft(e *InputType) bool {
-	return marvlib.API.InputIsKeyDown(marvlib.KeyArrowLeft) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_LEFT != 0
+	return API.InputIsKeyDown(marvtypes.KeyArrowLeft) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_LEFT != 0
 }
 func isRight(e *InputType) bool {
-	return marvlib.API.InputIsKeyDown(marvlib.KeyArrowRight) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_RIGHT != 0
+	return API.InputIsKeyDown(marvtypes.KeyArrowRight) || e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_RIGHT != 0
 }
 func isButton(e *InputType) bool {
-	return marvlib.API.InputIsKeyDown(marvlib.KeySpace) ||
+	return API.InputIsKeyDown(marvtypes.KeySpace) ||
 		e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_BOTTOM != 0 ||
 		e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_TOP != 0 ||
 		e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_LEFT != 0 ||
@@ -96,14 +95,14 @@ func isButton(e *InputType) bool {
 var suppressControllerRepeat bool
 
 func isJustUp(e *InputType) bool {
-	return marvlib.API.InputIsKeyJustPressed(marvlib.KeyArrowUp) || (!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_UP != 0)
+	return API.InputIsKeyJustPressed(marvtypes.KeyArrowUp) || (!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_UP != 0)
 }
 func isJustDown(e *InputType) bool {
-	return marvlib.API.InputIsKeyJustPressed(marvlib.KeyArrowDown) || (!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_DOWN != 0)
+	return API.InputIsKeyJustPressed(marvtypes.KeyArrowDown) || (!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_DPAD_DOWN != 0)
 }
 func isJustButton(e *InputType) bool {
 	// space or any button
-	return marvlib.API.InputIsKeyJustPressed(marvlib.KeySpace) ||
+	return API.InputIsKeyJustPressed(marvtypes.KeySpace) ||
 		(!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_BOTTOM != 0) ||
 		(!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_TOP != 0) ||
 		(!suppressControllerRepeat && e.GamepadButtonStates[0].Mapped&MAPPED_GAMEPAD_BIT_BUTTON_LEFT != 0) ||
@@ -211,9 +210,10 @@ const (
 	NPC_END
 )
 
-func Start() {
+func Start(api marvtypes.MarvAPI) {
+	API = api
 	//marv.SfxBanks[0].PlayLooped()
-	marvlib.API.MidBanksGet(0).Play()
+	API.MidBanksGet(0).Play()
 
 	m = &Map{}
 	c = &Camera{}
@@ -332,13 +332,13 @@ func Start() {
 		npcs[i].Start()
 	}
 
-	marvlib.API.SpritesGet(SpriteOverlay).ChangePos(image.Rectangle{
+	API.SpritesGet(SpriteOverlay).ChangePos(image.Rectangle{
 		image.Point{0, 0},
 		image.Point{320, 200},
 	})
-	marvlib.API.SpritesGet(SpriteOverlay).Show(
+	API.SpritesGet(SpriteOverlay).Show(
 		GfxBankOverlay,
-		marvlib.API.MapBanksGet(MapBankMap).GetArea(MapBankAreaOverlay),
+		API.MapBanksGet(MapBankMap).GetArea(MapBankAreaOverlay),
 	)
 	//	marv.Sprites[SpriteOverlay].ChangeViewport(
 	//		image.Point{256 - 32, 28},
@@ -352,18 +352,20 @@ func Start() {
 
 var onTitleScreen = true
 
+var API marvtypes.MarvAPI
+
 func Update() {
 	if onTitleScreen {
 		t.Update()
 	} else {
 		e := &InputType{
-			MousePos:        marvlib.API.InputMousePos(),
-			MousePosDelta:   marvlib.API.InputMousePosDelta(),
-			MouseWheelDelta: marvlib.API.InputMouseWheelDelta(),
-			MousePressed:    marvlib.API.InputMousePressed(),
-			MouseHeld:       marvlib.API.InputMouseHeld(),
-			MouseReleased:   marvlib.API.InputMouseReleased(),
-			InputChars:      marvlib.API.InputChars(),
+			MousePos:        API.InputMousePos(),
+			MousePosDelta:   API.InputMousePosDelta(),
+			MouseWheelDelta: API.InputMouseWheelDelta(),
+			MousePressed:    API.InputMousePressed(),
+			MouseHeld:       API.InputMouseHeld(),
+			MouseReleased:   API.InputMouseReleased(),
+			InputChars:      API.InputChars(),
 			GamepadButtonStates: [4]marvtypes.GamepadState{
 				{Unmapped: 0, Mapped: 0},
 				{Unmapped: 0, Mapped: 0},
